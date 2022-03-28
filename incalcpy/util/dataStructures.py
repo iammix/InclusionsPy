@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class Properties:
+class Properties(object):
     def __init__(self, dictionary=[]):
         for key in dictionary.keys():
             setattr(self, key, dictionary[key])
@@ -31,4 +31,46 @@ class GlobalData(Properties):
     def __init__(self, nodes, elements, dofs):
         super().__init__(self, {'nodes': nodes, 'elements': elements, 'dofs': dofs})
         self.state = np.zeros(len(self.dofs))
-        self.Dstate = np.zeros(dofs)
+        self.Dstate = np.zeros(len(self.dofs))
+        self.fint = np.zeros(len(self.dofs))
+        self.fhat = np.zeros(len(self.dofs))
+        self.velocity = np.zeros(len(self.dofs))
+        self.acceleration = np.zeros(len(self.dofs))
+
+        self.cycle = 0
+        self.iiter = 0
+        self.time = 0.0
+
+        self.outputNames = []
+        
+    # TODO: Complete the code to read from file
+    def readFromFile(self, fname):
+        print("Reading External Forces . . . ")
+        with open(fname, 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                if line.startswith('<ExternalForces>'):
+                    pass
+
+
+    def resetNodalOutput(self):
+        for outputName in self.outputNames:
+            delattr(self, outputName)
+            delattr(self, f"{outputName}Weights")
+        self.outputNames = []
+
+
+class ElementData():
+
+    def __init__(self, elstate, elDstate):
+        nDof = len(elstate)
+        self.state = elstate
+        self.Dstate = elDstate
+        self.stiff = np.zeros(shape=(nDof, nDof))
+        self.fint = np.zeros(shape=nDof)
+        self.mass = np.zeros(shape=(nDof, nDof))
+        self.lumped = np.zeros(shape=nDof)
+        self.outlabel = []
+
+    def __str__(self) -> str:
+        return self.state

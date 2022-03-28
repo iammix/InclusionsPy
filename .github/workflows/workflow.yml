@@ -1,0 +1,10 @@
+name: "TODO to Issues"
+on: ["push"]
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@master"
+      - name: "TODO to Issues"
+        uses: "alstr/todo-to-issue-action@4.6.3"
+        id: "todo"
