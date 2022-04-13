@@ -42,16 +42,14 @@ class GlobalData(Properties):
         self.time = 0.0
 
         self.outputNames = []
-        
+
     # TODO: Complete the code to read from file
     def readFromFile(self, fname):
-        print("Reading External Forces . . . ")
         with open(fname, 'r') as f:
             lines = f.readlines()
             for line in lines:
                 if line.startswith('<ExternalForces>'):
                     pass
-
 
     def resetNodalOutput(self):
         for outputName in self.outputNames:
