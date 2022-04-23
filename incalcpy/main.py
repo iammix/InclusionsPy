@@ -2,6 +2,8 @@ import numpy as np
 from util.dataStructures import Properties
 from fem.NodeSet import NodeSet
 from fem.ElementSet import ElementSet
+from fem.DofSpace import DofSpace
+from util.dataStructures import GlobalData
 
 
 class Pile:
@@ -45,3 +47,10 @@ class Pile:
                 else:
                     self.P_elements.add(node_tag, 'TrussP', [node_tag, node_tag + 1])
                     length += self.mesh
+        else:
+            pass
+
+    def create_dofSpace(self):
+        self.P_dofs = DofSpace(self.P_elements)
+        self.P_globaldat = GlobalData(self.P_nodes, self.P_elements, self.Pdofs)
+
