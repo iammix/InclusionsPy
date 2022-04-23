@@ -4,6 +4,7 @@ from fem.NodeSet import NodeSet
 from fem.ElementSet import ElementSet
 from fem.DofSpace import DofSpace
 from util.dataStructures import GlobalData
+from fem.Assembly import assembleTangentStiffness
 
 
 class Pile:
@@ -52,5 +53,17 @@ class Pile:
 
     def create_dofSpace(self):
         self.P_dofs = DofSpace(self.P_elements)
-        self.P_globaldat = GlobalData(self.P_nodes, self.P_elements, self.Pdofs)
+        self.P_globaldat = GlobalData(self.P_nodes, self.P_elements, self.P_dofs)
 
+    def assembly_stiffness_matrix(self):
+        a = self.P_globaldat.state
+        Da = self.P_globaldat.Dstate
+        fint = np.zeros(len(self.P_dofs))
+        outputs = [[0., 0.]]
+        self.K_P, fint = assembleTangentStiffness(self.props, self.P_globaldat)
+
+    def delete_zero_rows_columns(self):
+        kp = self.K_P.toarray()
+        for i in range(len(kp), 0, -2):
+            kp = np.delete(kp, i, axis=0)
+            kp = np.delete(kp, i, axis=1)
